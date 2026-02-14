@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+{% endblock %}
+{% block body %}
+
+<!-- Top Header with Progress Bar -->
+<header class="app-header">
+    <div class="header-top">
+        <h1 class="header-title">&#127823; Nutri-Track</h1>
+        <button id="settingsBtn" class="btn-icon" title="Settings">&#9881;</button>
+    </div>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text">
+            <span id="caloriesCurrent">0</span> / <span id="caloriesTarget">2000</span> kcal
+        </div>
+    </div>
+</header>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal" style="display:none">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Settings</h2>
+            <button class="btn-close" id="closeSettings">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="targetInput">Daily Calorie Target</label>
+                <input type="number" id="targetInput" min="500" max="10000" step="50">
+            </div>
+            <button id="saveTarget" class="btn btn-primary btn-full">Save Target</button>
+
+            <hr style="margin: 1.5rem 0; border-color: var(--border)">
+
+            <div class="form-group">
+                <label>Theme</label>
+                <div class="theme-toggle">
+                    <button class="theme-option" data-theme="auto">
+                        <span class="theme-icon">&#127769;</span>
+                        <span>Auto</span>
+                    </button>
+                    <button class="theme-option" data-theme="light">
+                        <span class="theme-icon">&#9728;&#65039;</span>
+                        <span>Light</span>
+                    </button>
+                    <button class="theme-option" data-theme="dark">
+                        <span class="theme-icon">&#127769;</span>
+                        <span>Dark</span>
+                    </button>
+                </div>
+            </div>
+
+            <hr style="margin: 1.5rem 0; border-color: var(--border)">
+
+            <div class="settings-user">
+                <span id="settingsUsername"></span>
+                <button id="logoutBtn" class="btn btn-outline">Sign Out</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Views -->
+<main class="app-main">
+    <!-- Dashboard View -->
+    <section id="view-dashboard" class="view active">
+        <div class="dashboard-grid">
+            <div class="card macro-card">
+                <h3>Today's Macros</h3>
+                <div class="chart-container">
+                    <canvas id="macroChart"></canvas>
+                </div>
+                <div class="macro-legend" id="macroLegend">
+                    <div class="legend-item"><span class="dot" style="background:#4CAF50"></span> Protein: <strong id="legendProtein">0g</strong></div>
+                    <div class="legend-item"><span class="dot" style="background:#FF9800"></span> Carbs: <strong id="legendCarbs">0g</strong></div>
+                    <div class="legend-item"><span class="dot" style="background:#f44336"></span> Fat: <strong id="legendFat">0g</strong></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Today's Meals</h3>
+                    <span class="meal-count" id="mealCount">0 meals</span>
+                </div>
+                <div id="todayMealsList" class="meals-list">
+                    <div class="empty-state">
+                        <p>No meals logged yet today</p>
+                        <p class="text-muted">Tap the + button to add your first meal</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meal Suggestions -->
+            <div id="suggestionsCard" class="card suggestions-card" style="display:none">
+                <h3>&#128161; Meal Suggestions</h3>
+                <p class="text-muted">Based on your remaining calories</p>
+                <div id="suggestionsList"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Meal View -->
+    <section id="view-add" class="view">
+        <div class="add-meal-container">
+            <div id="cameraSection" class="camera-section">
+                <div class="camera-icon">&#128247;</div>
+                <h2>Add a Meal</h2>
+                <p class="text-muted">Take a photo or choose from gallery</p>
+
+                <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none">
+
+                <div class="camera-buttons">
+                    <button id="takePhotoBtn" class="btn btn-primary btn-large">
+                        &#128248; Take Photo
+                    </button>
+                    <button id="galleryBtn" class="btn btn-outline btn-large">
+                        &#128444; Choose from Gallery
+                    </button>
+                </div>
+            </div>
+
+            <!-- Analysis Loading -->
+            <div id="analysisLoading" class="analysis-loading" style="display:none">
+                <div class="spinner"></div>
+                <p>Analyzing your food...</p>
+            </div>
+
+            <!-- Analysis Result -->
+            <div id="analysisResult" class="analysis-result" style="display:none">
+                <div class="result-image-container">
+                    <img id="resultImage" src="" alt="Food photo">
+                </div>
+
+                <div class="result-card">
+                    <div class="result-header">
+                        <h2 id="resultFoodName">Food Name</h2>
+                        <div class="food-score" id="resultFoodScore">
+                            <span class="score-value">0</span>
+                            <span class="score-label">/10</span>
+                        </div>
+                    </div>
+
+                    <div class="result-calories">
+                        <span class="cal-number" id="resultCalories">0</span>
+                        <span class="cal-label">calories</span>
+                    </div>
+
+                    <div class="result-macros">
+                        <div class="macro-item">
+                            <span class="macro-value" id="resultProtein">0g</span>
+                            <span class="macro-label">Protein</span>
+                        </div>
+                        <div class="macro-item">
+                            <span class="macro-value" id="resultCarbs">0g</span>
+                            <span class="macro-label">Carbs</span>
+                        </div>
+                        <div class="macro-item">
+                            <span class="macro-value" id="resultFat">0g</span>
+                            <span class="macro-label">Fat</span>
+                        </div>
+                    </div>
+
+                    <div class="result-portion" id="resultPortion"></div>
+
+                    <div class="health-tags">
+                        <h4>&#9989; Health Benefits</h4>
+                        <div id="benefitsTags" class="tags-container"></div>
+                    </div>
+
+                    <div class="health-tags">
+                        <h4>&#9888;&#65039; Watch Out</h4>
+                        <div id="negativesTags" class="tags-container"></div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button id="logMealBtn" class="btn btn-primary btn-large btn-full">
+                            &#9989; Log This Meal
+                        </button>
+                        <button id="retakeBtn" class="btn btn-outline btn-large btn-full">
+                            &#128260; Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History View -->
+    <section id="view-history" class="view">
+        <div class="history-container">
+            <div class="history-header">
+                <h2>Meal History</h2>
+                <input type="date" id="historyDate" class="date-input">
+            </div>
+            <div class="history-summary" id="historySummary"></div>
+            <div id="historyList" class="meals-list">
+                <div class="empty-state">
+                    <p>No meals found for this date</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weekly View -->
+    <section id="view-weekly" class="view">
+        <div class="weekly-container">
+            <h2>Weekly Summary</h2>
+            <div class="card">
+                <div class="chart-container chart-container-wide">
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+            </div>
+            <div class="weekly-stats" id="weeklyStats"></div>
+            <button id="exportBtn" class="btn btn-outline btn-full" style="margin-top:1rem">
+                &#128190; Export to CSV
+            </button>
+        </div>
+    </section>
+</main>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <button class="nav-btn active" data-view="dashboard">
+        <span class="nav-icon">&#127968;</span>
+        <span class="nav-label">Dashboard</span>
+    </button>
+    <button class="nav-btn" data-view="add">
+        <span class="nav-icon nav-icon-add">&#43;</span>
+        <span class="nav-label">Add Meal</span>
+    </button>
+    <button class="nav-btn" data-view="history">
+        <span class="nav-icon">&#128203;</span>
+        <span class="nav-label">History</span>
+    </button>
+    <button class="nav-btn" data-view="weekly">
+        <span class="nav-icon">&#128200;</span>
+        <span class="nav-label">Weekly</span>
+    </button>
+</nav>
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/charts.js"></script>
+<script src="/static/js/dashboard.js"></script>
+<script src="/static/js/camera.js"></script>
+<script src="/static/js/history.js"></script>
+<script src="/static/js/weekly.js"></script>
+<script src="/static/js/app.js"></script>
+{% endblock %}
