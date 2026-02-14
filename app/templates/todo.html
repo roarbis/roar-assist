@@ -1,0 +1,85 @@
+{% extends "base_with_sidebar.html" %}
+{% block title %}To Do{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/todo.css">
+{% endblock %}
+{% block body %}
+
+<!-- To Do Header -->
+<header class="todo-header">
+    <div class="header-content">
+        <h1 class="todo-title">✅ To Do</h1>
+        <p class="todo-subtitle">Shared task management for your team</p>
+    </div>
+    <div class="header-stats">
+        <div class="stat-badge">
+            <span id="totalTasks">0</span>
+            <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-badge">
+            <span id="completedTasks">0</span>
+            <span class="stat-label">Done</span>
+        </div>
+        <div class="stat-badge">
+            <span id="pendingTasks">0</span>
+            <span class="stat-label">Pending</span>
+        </div>
+    </div>
+</header>
+
+<!-- Add Task Section -->
+<section class="add-task-section">
+    <div class="add-task-card">
+        <h2>➕ Create New Task</h2>
+        <form id="addTaskForm">
+            <div class="form-row">
+                <div class="form-group flex-grow">
+                    <label for="taskTitle">Task Title *</label>
+                    <input type="text" id="taskTitle" placeholder="What needs to be done?" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group flex-grow">
+                    <label for="taskDescription">Description (optional)</label>
+                    <textarea id="taskDescription" rows="3" placeholder="Add more details..."></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="assignTo">Assign To</label>
+                    <select id="assignTo">
+                        <option value="">Unassigned</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <span>Create Task</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Filter Tabs -->
+<div class="filter-tabs">
+    <button class="tab-btn active" data-filter="all">All Tasks</button>
+    <button class="tab-btn" data-filter="pending">Pending</button>
+    <button class="tab-btn" data-filter="completed">Completed</button>
+    <button class="tab-btn" data-filter="mine">My Tasks</button>
+</div>
+
+<!-- Tasks List -->
+<main class="tasks-container">
+    <div id="tasksList" class="tasks-list">
+        <!-- Tasks will be inserted here by JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-todo-state" style="display: none;">
+        <div class="empty-icon">✅</div>
+        <h3>No tasks yet</h3>
+        <p>Create your first task to get started!</p>
+    </div>
+</main>
+
+<script src="/static/js/todo.js"></script>
+{% endblock %}

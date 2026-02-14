@@ -1,0 +1,200 @@
+/* =========================================
+   AURORA ASSIST - Enhanced Color Schemes
+   Inspired by Figma Color Combinations
+   ========================================= */
+
+:root {
+    /* Metallic Accents */
+    --blue-popsicle: #0f2862;
+    --redline: #9e363a;
+    --purple-shadow: #091f36;
+    --grey-blue-leaf: #4f5f76;
+
+    /* Light Mode - Lavender Lullaby + Quiet Luxury */
+    --light-primary: #8B7AB8;
+    --light-secondary: #C8B8DB;
+    --light-accent: #E8DFF5;
+    --light-bg: #F5F2F9;
+    --light-surface: #FFFFFF;
+    --light-text: #2D2642;
+    --light-text-muted: #6B5B8E;
+    --light-border: #E0D5ED;
+
+    /* Light Mode - Charming Seaside accents */
+    --light-ocean: #4A90A4;
+    --light-coral: #E8998D;
+    --light-sand: #F4E9CD;
+
+    /* Dark Mode - Iris Garden + Emerald Odyssey */
+    --dark-bg: #0A0E27;
+    --dark-surface: #151B3D;
+    --dark-card: #1A2149;
+    --dark-primary: #7B68EE;
+    --dark-secondary: #2ECC71;
+    --dark-emerald: #1B9977;
+    --dark-purple: #8B7AB8;
+    --dark-text: #E8E6F0;
+    --dark-text-muted: #A39BBF;
+    --dark-border: #2D3561;
+    --dark-accent: #B8A4E8;
+
+    /* Gradients */
+    --gradient-iris: linear-gradient(135deg, #7B68EE 0%, #B8A4E8 50%, #E8DFF5 100%);
+    --gradient-emerald: linear-gradient(135deg, #1B9977 0%, #2ECC71 50%, #52D894 100%);
+    --gradient-luxury: linear-gradient(135deg, #8B7AB8 0%, #C8B8DB 50%, #E8DFF5 100%);
+    --gradient-ocean: linear-gradient(135deg, #0f2862 0%, #4A90A4 50%, #7BB8CC 100%);
+    --gradient-aurora: linear-gradient(135deg, #7B68EE 0%, #2ECC71 25%, #4A90A4 50%, #E8998D 75%, #B8A4E8 100%);
+    --gradient-metallic: linear-gradient(135deg, #091f36 0%, #0f2862 50%, #4f5f76 100%);
+    --gradient-redline: linear-gradient(135deg, #9e363a 0%, #E8998D 100%);
+
+    /* Aurora-specific enhancements */
+    --aurora-shimmer: linear-gradient(
+        90deg,
+        rgba(123, 104, 238, 0.1) 0%,
+        rgba(46, 204, 113, 0.1) 25%,
+        rgba(74, 144, 164, 0.1) 50%,
+        rgba(232, 153, 141, 0.1) 75%,
+        rgba(184, 164, 232, 0.1) 100%
+    );
+
+    /* Shadow colors */
+    --shadow-iris: rgba(123, 104, 238, 0.3);
+    --shadow-emerald: rgba(27, 153, 119, 0.3);
+    --shadow-dark: rgba(0, 0, 0, 0.4);
+    --shadow-light: rgba(0, 0, 0, 0.1);
+
+    /* Current theme (Dark Mode by default) */
+    --primary: var(--dark-primary);
+    --primary-light: var(--dark-accent);
+    --primary-dark: #6554C8;
+    --secondary: var(--dark-secondary);
+    --accent: var(--dark-emerald);
+    --bg: var(--dark-bg);
+    --card-bg: var(--dark-card);
+    --surface: var(--dark-surface);
+    --text: var(--dark-text);
+    --text-muted: var(--dark-text-muted);
+    --border: var(--dark-border);
+    --shadow: 0 4px 16px var(--shadow-dark);
+    --shadow-lg: 0 8px 32px var(--shadow-dark);
+    --radius: 16px;
+    --radius-sm: 12px;
+}
+
+/* Light Mode Override */
+[data-theme="light"] {
+    --primary: var(--light-primary);
+    --primary-light: var(--light-accent);
+    --primary-dark: #6B5B8E;
+    --secondary: var(--light-ocean);
+    --accent: var(--light-coral);
+    --bg: var(--light-bg);
+    --card-bg: var(--light-surface);
+    --surface: var(--light-surface);
+    --text: var(--light-text);
+    --text-muted: var(--light-text-muted);
+    --border: var(--light-border);
+    --shadow: 0 4px 16px var(--shadow-light);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* Auto dark mode based on system preference */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --primary: var(--light-primary);
+        --primary-light: var(--light-accent);
+        --primary-dark: #6B5B8E;
+        --secondary: var(--light-ocean);
+        --accent: var(--light-coral);
+        --bg: var(--light-bg);
+        --card-bg: var(--light-surface);
+        --surface: var(--light-surface);
+        --text: var(--light-text);
+        --text-muted: var(--light-text-muted);
+        --border: var(--light-border);
+        --shadow: 0 4px 16px var(--shadow-light);
+        --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* Glassmorphism effect */
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .glass {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(139, 122, 184, 0.2);
+}
+
+/* Gradient backgrounds */
+.bg-gradient-iris {
+    background: var(--gradient-iris);
+}
+
+.bg-gradient-emerald {
+    background: var(--gradient-emerald);
+}
+
+.bg-gradient-luxury {
+    background: var(--gradient-luxury);
+}
+
+.bg-gradient-ocean {
+    background: var(--gradient-ocean);
+}
+
+.bg-gradient-aurora {
+    background: var(--gradient-aurora);
+}
+
+.bg-gradient-metallic {
+    background: var(--gradient-metallic);
+}
+
+/* Animated gradient background */
+@keyframes gradient-shift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.bg-animated-gradient {
+    background: var(--gradient-aurora);
+    background-size: 200% 200%;
+    animation: gradient-shift 15s ease infinite;
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer {
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--aurora-shimmer);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+    pointer-events: none;
+}

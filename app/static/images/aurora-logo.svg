@@ -1,0 +1,50 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="auroraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7B68EE;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2ECC71;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4A90A4;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Outer circle with gradient -->
+  <circle cx="60" cy="60" r="55" fill="url(#auroraGradient)" opacity="0.2"/>
+
+  <!-- R Letter with aurora styling -->
+  <path d="
+    M 35 35
+    L 35 85
+    M 35 35
+    L 55 35
+    C 68 35, 72 40, 72 50
+    C 72 60, 68 65, 55 65
+    L 35 65
+    M 55 65
+    L 72 85
+  "
+  stroke="url(#auroraGradient)"
+  stroke-width="8"
+  fill="none"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  filter="url(#glow)"/>
+
+  <!-- Decorative aurora waves -->
+  <path d="M 20 25 Q 40 20, 60 25 T 100 25"
+        stroke="#7B68EE"
+        stroke-width="2"
+        fill="none"
+        opacity="0.6"/>
+  <path d="M 20 95 Q 40 90, 60 95 T 100 95"
+        stroke="#2ECC71"
+        stroke-width="2"
+        fill="none"
+        opacity="0.6"/>
+</svg>

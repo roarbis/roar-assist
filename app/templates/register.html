@@ -1,19 +1,26 @@
 {% extends "base.html" %}
-{% block body %}
-<script>
-// Apply theme before page loads to prevent flash
-(function() {
-    const theme = localStorage.getItem('theme') || 'auto';
-    if (theme !== 'auto') {
-        document.documentElement.setAttribute('data-theme', theme);
+{% block head %}
+<link rel="stylesheet" href="/static/css/aurora_assist.css">
+<style>
+    .auth-container {
+        background: none;
     }
-})();
-</script>
+    .auth-card {
+        background: rgba(26, 31, 46, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(139, 79, 184, 0.3);
+    }
+</style>
+{% endblock %}
+{% block body %}
+<!-- Aurora Background -->
+<div class="aurora-background"></div>
+
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-logo">
-            <div class="logo-icon">&#127823;</div>
-            <h1>Nutri-Track</h1>
+            <div class="logo-icon">✨</div>
+            <h1 style="background: linear-gradient(135deg, #8b4fb8, #3fa377); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Aurora Assist</h1>
             <p class="auth-subtitle">Create your account</p>
         </div>
 
@@ -59,7 +66,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         });
         const data = await res.json();
         if (data.success) {
-            window.location.href = '/';
+            window.location.href = '/apps';
         } else {
             errEl.textContent = data.message;
             errEl.style.display = 'block';

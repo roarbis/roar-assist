@@ -1,0 +1,572 @@
+/* =========================================
+   SIDEBAR NAVIGATION & AI NEWS STYLES
+   ========================================= */
+
+/* ===== Layout with Sidebar ===== */
+body {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background: linear-gradient(180deg, var(--aurora-purple-dark), var(--aurora-purple));
+    color: white;
+    padding: 1.5rem 0;
+    box-shadow: 2px 0 20px rgba(107, 46, 143, 0.3);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    margin-bottom: 1rem;
+}
+
+.sidebar-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin: 0;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: all 0.2s;
+    border-left: 4px solid transparent;
+}
+
+.sidebar-link:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.sidebar-link.active {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border-left-color: white;
+    font-weight: 600;
+}
+
+.sidebar-icon {
+    font-size: 1.5rem;
+    width: 30px;
+    text-align: center;
+}
+
+.sidebar-label {
+    font-size: 1rem;
+}
+
+.main-content {
+    margin-left: 250px;
+    flex: 1;
+    min-height: 100vh;
+    background: var(--bg);
+}
+
+/* ===== AI News Specific Styles ===== */
+.news-header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: white;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    margin-bottom: 1rem;
+}
+
+.news-title {
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+}
+
+.news-subtitle {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn-refresh {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    min-height: 44px;
+}
+
+.btn-refresh:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.btn-refresh:active {
+    transform: scale(0.95);
+}
+
+.btn-refresh.spinning #refreshIcon {
+    animation: spin 1s linear infinite;
+}
+
+.filter-date {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    cursor: pointer;
+    min-height: 44px;
+}
+
+.filter-date::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+/* ===== News Grid (Compact List) ===== */
+.news-main {
+    padding: 1rem 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.news-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+/* ===== News Card (Compact) ===== */
+.news-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    position: relative;
+    border-left: 4px solid transparent;
+}
+
+.news-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateX(4px);
+    border-left-color: var(--primary);
+}
+
+.news-card.read {
+    opacity: 0.5;
+}
+
+.news-image {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    background: var(--border);
+}
+
+.news-image-placeholder {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    background: linear-gradient(135deg, #7B68EE, #2ECC71);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border-radius: var(--radius-sm);
+}
+
+.news-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.news-source {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: rgba(123, 104, 238, 0.15);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.news-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.news-description {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+}
+
+.news-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.news-date {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.news-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.btn-bookmark,
+.btn-read-more {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.4rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-bookmark:hover,
+.btn-read-more:hover {
+    background: rgba(123, 104, 238, 0.1);
+    color: var(--primary);
+}
+
+.btn-bookmark.bookmarked {
+    color: #FFB74D;
+}
+
+.btn-read-more {
+    background: linear-gradient(135deg, #7B68EE, #2ECC71);
+    color: white;
+    font-weight: bold;
+}
+
+.btn-read-more:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(123, 104, 238, 0.3);
+}
+
+/* ===== Loading & Error States ===== */
+.loading-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.spinner-large {
+    width: 60px;
+    height: 60px;
+    border: 5px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1.5rem;
+}
+
+.error-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.error-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: var(--danger);
+}
+
+.error-state h3 {
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.error-state p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.empty-news-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.empty-news-state h3 {
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.empty-news-state p {
+    color: var(--text-muted);
+}
+
+/* ===== Floating Bookmark Button ===== */
+.floating-bookmark-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(26,122,78,0.4);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+}
+
+.floating-bookmark-btn:hover {
+    background: var(--primary-dark);
+    transform: scale(1.1);
+}
+
+.bookmark-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--danger);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ===== Bookmarks Modal ===== */
+.bookmarks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.bookmark-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    align-items: flex-start;
+}
+
+.bookmark-item-content {
+    flex: 1;
+}
+
+.bookmark-item-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.bookmark-item-source {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.btn-remove-bookmark {
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+}
+
+/* ===== Burger Menu ===== */
+.burger-menu {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1001;
+    background: linear-gradient(135deg, #7B68EE, #2ECC71);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(123, 104, 238, 0.4);
+    transition: all 0.3s;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.burger-menu span {
+    width: 24px;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.burger-menu.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.burger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-menu.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+    .burger-menu {
+        display: flex;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        width: 250px;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        transition: margin-left 0.3s ease;
+    }
+
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .news-header {
+        padding: 1rem;
+        padding-top: 4rem;
+    }
+
+    .news-title {
+        font-size: 1.5rem;
+    }
+
+    .news-main {
+        padding: 1rem;
+    }
+
+    .floating-bookmark-btn {
+        bottom: 1rem;
+        right: 1rem;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    /* Auto-hide header on scroll */
+    .news-header.hidden {
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+    }
+}
+
+@media (max-width: 480px) {
+    .news-header {
+        padding: 0.75rem;
+        padding-top: 3.5rem;
+    }
+
+    .header-actions {
+        flex-wrap: wrap;
+    }
+
+    .news-title {
+        font-size: 1.25rem;
+    }
+
+    .news-subtitle {
+        font-size: 0.85rem;
+    }
+}

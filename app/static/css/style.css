@@ -3,19 +3,32 @@
    ========================================= */
 
 :root {
-    --primary: #1a7a4e;
-    --primary-light: #2d8659;
-    --primary-dark: #145f3c;
-    --accent: #4CAF50;
+    /* Aurora Colors - Modern Dark Green/Purple */
+    --aurora-dark: #0f1419;
+    --aurora-purple: #6b2e8f;
+    --aurora-purple-light: #8b4fb8;
+    --aurora-purple-dark: #4a1e61;
+    --aurora-green: #2d7a5f;
+    --aurora-green-light: #3fa377;
+    --aurora-green-dark: #1f5a44;
+    --aurora-teal: #1a9b8e;
+    --aurora-pink: #d946ef;
+    --aurora-blue: #3b82f6;
+
+    /* Updated color scheme */
+    --primary: #3fa377;
+    --primary-light: #52c797;
+    --primary-dark: #2d7a5f;
+    --accent: #8b4fb8;
     --warning: #FF9800;
     --danger: #f44336;
-    --bg: #f5f7fa;
-    --card-bg: #ffffff;
-    --text: #1a1a2e;
-    --text-muted: #6b7280;
-    --border: #e5e7eb;
-    --shadow: 0 2px 8px rgba(0,0,0,0.08);
-    --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+    --bg: #0f1419;
+    --card-bg: #1a1f2e;
+    --text: #e8e8e8;
+    --text-muted: #9ca3af;
+    --border: #2a2f3e;
+    --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.4);
     --radius: 12px;
     --radius-sm: 8px;
     --nav-height: 70px;

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="theme-color" content="#6b2e8f">
+    <title>Aurora Assist</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/colors.css">
+    <link rel="stylesheet" href="/static/css/aurora_assist.css">
+</head>
+<body class="aurora-body">
+    <!-- Aurora Background -->
+    <div class="aurora-background"></div>
+
+    <!-- Main Container -->
+    <div class="aurora-container">
+        <!-- Header -->
+        <header class="aurora-header">
+            <div class="aurora-logo">
+                <img src="/static/images/aurora-logo.svg" alt="Aurora Assist" class="aurora-icon-svg">
+                <div class="aurora-text">
+                    <h1>Aurora Assist</h1>
+                    <p class="aurora-subtitle">Your Personal App Hub</p>
+                </div>
+            </div>
+            <div class="user-info">
+                <span class="welcome-text">Welcome, <strong id="username"></strong></span>
+                <button id="logoutBtn" class="btn-logout">Sign Out</button>
+            </div>
+        </header>
+
+        <!-- App Grid -->
+        <main class="app-grid">
+            <!-- Nutri-Track App Card -->
+            <a href="/nutri-track" class="app-card nutri-card">
+                <div class="app-card-glow"></div>
+                <div class="app-card-content">
+                    <div class="app-icon">🍇</div>
+                    <h2 class="app-name">Nutri-Track</h2>
+                    <p class="app-description">Track your nutrition, log meals, and monitor your health goals</p>
+                    <div class="app-features">
+                        <span class="feature-tag">📸 Photo Analysis</span>
+                        <span class="feature-tag">📊 Progress Charts</span>
+                        <span class="feature-tag">🎯 Goal Tracking</span>
+                    </div>
+                    <div class="app-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- AI News App Card -->
+            <a href="/news" class="app-card news-card">
+                <div class="app-card-glow"></div>
+                <div class="app-card-content">
+                    <div class="app-icon">📰</div>
+                    <h2 class="app-name">AI News</h2>
+                    <p class="app-description">Stay updated with the latest artificial intelligence news from around the world</p>
+                    <div class="app-features">
+                        <span class="feature-tag">🌐 Global Sources</span>
+                        <span class="feature-tag">🔖 Bookmarks</span>
+                        <span class="feature-tag">📅 Date Filter</span>
+                    </div>
+                    <div class="app-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- To Do App Card -->
+            <a href="/todo" class="app-card todo-card">
+                <div class="app-card-glow"></div>
+                <div class="app-card-content">
+                    <div class="app-icon">✅</div>
+                    <h2 class="app-name">To Do</h2>
+                    <p class="app-description">Manage shared tasks and collaborate with your team</p>
+                    <div class="app-features">
+                        <span class="feature-tag">👥 Shared Tasks</span>
+                        <span class="feature-tag">🎯 Assignments</span>
+                        <span class="feature-tag">✓ Track Progress</span>
+                    </div>
+                    <div class="app-arrow">→</div>
+                </div>
+            </a>
+        </main>
+
+        <!-- Footer -->
+        <footer class="aurora-footer">
+            <p>&copy; 2026 Aurora Assist - Your Unified App Experience</p>
+        </footer>
+    </div>
+
+    <script>
+        // Load username from API
+        fetch('/api/user')
+            .then(res => res.json())
+            .then(data => {
+                if (data.username) {
+                    document.getElementById('username').textContent = data.username;
+                }
+            })
+            .catch(() => {
+                document.getElementById('username').textContent = 'Guest';
+            });
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            fetch('/auth/logout', { method: 'POST' })
+                .then(() => window.location.href = '/auth/login')
+                .catch(() => window.location.href = '/auth/login');
+        });
+    </script>
+</body>
+</html>
