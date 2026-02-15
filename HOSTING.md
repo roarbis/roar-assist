@@ -18,7 +18,8 @@ This guide covers multiple options for hosting Nutri-Track publicly so you can a
    git add .
    git commit -m "Initial commit"
    # Create a new repo on GitHub, then:
-   git remote add origin https://github.com/YOUR_USERNAME/nutri-track.git
+   git remote add origin https://github.com/roarbis/nutri-track.git
+   git remote set-url origin https://github.com/roarbis/nutri-track.git
    git push -u origin main
    ```
 
