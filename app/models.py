@@ -26,6 +26,17 @@ class Meal(db.Model):
     image_data = db.Column(db.LargeBinary, nullable=True)
     logged_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
+    # Portion tracking fields
+    portion_multiplier = db.Column(db.Float, default=1.0)
+    original_portion = db.Column(db.String(100), nullable=True)
+    original_calories = db.Column(db.Float, nullable=True)
+    original_protein = db.Column(db.Float, nullable=True)
+    original_carbs = db.Column(db.Float, nullable=True)
+    original_fat = db.Column(db.Float, nullable=True)
+
+    # Entry method tracking
+    entry_method = db.Column(db.String(20), default='photo')  # 'photo' or 'text'
+
 
 class TodoTask(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -79,3 +79,45 @@ Return ONLY valid JSON array, no markdown fences, no extra text."""
         text = text.split('\n', 1)[1].rsplit('```', 1)[0].strip()
 
     return json.loads(text)
+
+
+def analyze_food_text(query: str) -> dict:
+    """Analyze food from text description and return nutrition estimates."""
+    client = get_client()
+
+    prompt = f"""You are a professional nutritionist. Analyze this food query:
+
+"{query}"
+
+Return a JSON object with EXACTLY these fields:
+{{
+    "food_name": "Interpreted food name (be specific)",
+    "calories": estimated total calories as a number,
+    "protein": estimated protein in grams as a number,
+    "carbs": estimated carbohydrates in grams as a number,
+    "fat": estimated fat in grams as a number,
+    "food_score": nutritional density score from 1-10 (10 = extremely nutritious, 1 = empty calories),
+    "health_benefits": ["benefit 1", "benefit 2", "benefit 3"],
+    "health_negatives": ["negative 1", "negative 2"],
+    "portion_estimate": "interpreted portion size (e.g., '200g', '1 cup', '1 medium piece')"
+}}
+
+Guidelines:
+- Parse any quantity mentioned in the query (e.g., "200g", "2 cups", "1 large")
+- If no quantity specified, assume a standard serving
+- Be realistic with estimates
+- Include 2-5 health benefits and 1-3 negatives
+- Food score reflects nutritional value
+- Return ONLY valid JSON, no markdown fences, no extra text"""
+
+    response = client.models.generate_content(
+        model='gemini-2.0-flash',
+        contents=[prompt]
+    )
+
+    text = response.text.strip()
+    # Strip markdown fences if present
+    if text.startswith('```'):
+        text = text.split('\n', 1)[1].rsplit('```', 1)[0].strip()
+
+    return json.loads(text)

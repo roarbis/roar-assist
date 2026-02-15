@@ -1,6 +1,7 @@
 // Camera / Photo capture and analysis
 
 let currentAnalysis = null;
+let portionMultiplier = 1.0;
 
 function initCamera() {
     const photoInput = document.getElementById('photoInput');
@@ -97,6 +98,97 @@ function displayAnalysisResult(data) {
     negativesEl.innerHTML = (data.health_negatives || []).map(n =>
         `<span class="tag tag-negative">${escapeHtml(n)}</span>`
     ).join('');
+
+    // Render portion adjuster
+    renderPortionAdjuster();
+}
+
+function renderPortionAdjuster() {
+    const adjusterEl = document.getElementById('portionAdjuster');
+    adjusterEl.style.display = 'block';
+
+    // Update current portion display
+    document.getElementById('currentPortion').textContent =
+        `${portionMultiplier}x (${currentAnalysis.portion_estimate || '1 serving'})`;
+
+    // Set up portion button listeners
+    const portionButtons = adjusterEl.querySelectorAll('.portion-btn[data-multiplier]');
+    portionButtons.forEach(btn => {
+        btn.addEventListener('click', handlePortionButtonClick);
+    });
+
+    // Set up custom input
+    const applyCustomBtn = document.getElementById('applyCustom');
+    if (applyCustomBtn) {
+        applyCustomBtn.addEventListener('click', handleCustomMultiplier);
+    }
+}
+
+function handlePortionButtonClick(e) {
+    const multiplierStr = e.target.dataset.multiplier;
+
+    if (multiplierStr === 'custom') {
+        // Show custom input
+        document.getElementById('customPortionInput').style.display = 'flex';
+        return;
+    }
+
+    const multiplier = parseFloat(multiplierStr);
+    updatePortionMultiplier(multiplier);
+
+    // Update active button
+    const portionButtons = document.querySelectorAll('.portion-btn');
+    portionButtons.forEach(btn => btn.classList.remove('active'));
+    e.target.classList.add('active');
+
+    // Hide custom input
+    document.getElementById('customPortionInput').style.display = 'none';
+}
+
+function handleCustomMultiplier() {
+    const input = document.getElementById('customMultiplier');
+    const multiplier = parseFloat(input.value);
+
+    if (isNaN(multiplier) || multiplier <= 0 || multiplier > 10) {
+        alert('Please enter a valid multiplier between 0.1 and 10');
+        return;
+    }
+
+    updatePortionMultiplier(multiplier);
+
+    // Update button states
+    const portionButtons = document.querySelectorAll('.portion-btn');
+    portionButtons.forEach(btn => btn.classList.remove('active'));
+
+    // Hide custom input
+    document.getElementById('customPortionInput').style.display = 'none';
+}
+
+function updatePortionMultiplier(multiplier) {
+    portionMultiplier = multiplier;
+
+    // Update current portion display
+    document.getElementById('currentPortion').textContent =
+        `${portionMultiplier}x (${currentAnalysis.portion_estimate || '1 serving'})`;
+
+    // Update nutritional values with animation
+    updateNutritionalValues();
+}
+
+function updateNutritionalValues() {
+    const elements = [
+        { id: 'resultCalories', value: Math.round(currentAnalysis.calories * portionMultiplier) },
+        { id: 'resultProtein', value: `${Math.round(currentAnalysis.protein * portionMultiplier)}g` },
+        { id: 'resultCarbs', value: `${Math.round(currentAnalysis.carbs * portionMultiplier)}g` },
+        { id: 'resultFat', value: `${Math.round(currentAnalysis.fat * portionMultiplier)}g` }
+    ];
+
+    elements.forEach(({ id, value }) => {
+        const el = document.getElementById(id);
+        el.classList.add('nutrition-updating');
+        el.textContent = value;
+        setTimeout(() => el.classList.remove('nutrition-updating'), 300);
+    });
 }
 
 async function handleLogMeal() {
@@ -109,14 +201,21 @@ async function handleLogMeal() {
     try {
         const res = await API.post('/api/meals/log', {
             food_name: currentAnalysis.food_name,
-            calories: currentAnalysis.calories,
-            protein: currentAnalysis.protein,
-            carbs: currentAnalysis.carbs,
-            fat: currentAnalysis.fat,
+            calories: currentAnalysis.calories * portionMultiplier,
+            protein: currentAnalysis.protein * portionMultiplier,
+            carbs: currentAnalysis.carbs * portionMultiplier,
+            fat: currentAnalysis.fat * portionMultiplier,
             food_score: currentAnalysis.food_score,
             health_benefits: currentAnalysis.health_benefits,
             health_negatives: currentAnalysis.health_negatives,
-            thumbnail: currentAnalysis.thumbnail
+            thumbnail: currentAnalysis.thumbnail,
+            portion_multiplier: portionMultiplier,
+            original_portion: currentAnalysis.portion_estimate,
+            original_calories: currentAnalysis.calories,
+            original_protein: currentAnalysis.protein,
+            original_carbs: currentAnalysis.carbs,
+            original_fat: currentAnalysis.fat,
+            entry_method: 'photo'
         });
 
         if (res && res.success) {
@@ -137,10 +236,12 @@ async function handleLogMeal() {
 
 function resetCamera() {
     currentAnalysis = null;
+    portionMultiplier = 1.0;
     document.getElementById('photoInput').value = '';
     document.getElementById('cameraSection').style.display = 'block';
     document.getElementById('analysisLoading').style.display = 'none';
     document.getElementById('analysisResult').style.display = 'none';
+    document.getElementById('portionAdjuster').style.display = 'none';
 }
 
 function escapeHtml(str) {

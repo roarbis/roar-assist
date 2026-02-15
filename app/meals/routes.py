@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 from app.extensions import db
 from app.models import Meal
 from app.meals import meals_bp
-from app.meals.gemini_service import analyze_food_image, get_meal_suggestions
+from app.meals.gemini_service import analyze_food_image, get_meal_suggestions, analyze_food_text
 from PIL import Image
 import io
 
@@ -88,13 +88,50 @@ def log_meal():
         food_score=int(data.get('food_score', 5)),
         health_benefits=json.dumps(data.get('health_benefits', [])),
         health_negatives=json.dumps(data.get('health_negatives', [])),
-        image_data=image_data
+        image_data=image_data,
+        portion_multiplier=float(data.get('portion_multiplier', 1.0)),
+        original_portion=data.get('original_portion'),
+        original_calories=float(data.get('original_calories')) if data.get('original_calories') else None,
+        original_protein=float(data.get('original_protein')) if data.get('original_protein') else None,
+        original_carbs=float(data.get('original_carbs')) if data.get('original_carbs') else None,
+        original_fat=float(data.get('original_fat')) if data.get('original_fat') else None,
+        entry_method=data.get('entry_method', 'photo')
     )
 
     db.session.add(meal)
     db.session.commit()
 
     return jsonify(success=True, meal_id=meal.id)
+
+
+@meals_bp.route('/analyze-text', methods=['POST'])
+@login_required
+def analyze_text():
+    """Analyze food from text description."""
+    data = request.get_json()
+
+    if not data or 'query' not in data:
+        return jsonify(error=True, message='Missing query'), 400
+
+    query = data['query'].strip()
+    if not query:
+        return jsonify(error=True, message='Query cannot be empty'), 400
+
+    try:
+        import os
+        api_key = os.environ.get('GEMINI_API_KEY', '')
+        if not api_key or api_key == 'PASTE_YOUR_GEMINI_API_KEY_HERE':
+            return jsonify(error=True, message='Gemini API key not configured'), 500
+
+        result = analyze_food_text(query)
+        return jsonify(result)
+
+    except json.JSONDecodeError:
+        return jsonify(error=True, message='Could not parse AI response'), 500
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify(error=True, message=f'Analysis failed: {str(e)}'), 500
 
 
 @meals_bp.route('/today', methods=['GET'])

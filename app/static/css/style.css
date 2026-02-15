@@ -979,3 +979,172 @@ body {
         align-items: center;
     }
 }
+
+/* ===== Portion Adjuster ===== */
+.portion-adjuster {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(var(--primary-rgb), 0.05);
+    border-radius: var(--radius);
+    border: 2px dashed var(--border);
+}
+
+.portion-adjuster h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.portion-current {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.portion-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.portion-btn {
+    flex: 1;
+    min-width: 60px;
+    padding: 0.625rem 0.75rem;
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.portion-btn:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.portion-btn.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+}
+
+.custom-portion-input {
+    display: none;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.custom-portion-input input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+}
+
+.custom-portion-input input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.custom-portion-input .btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.nutrition-updating {
+    animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+/* ===== Search View ===== */
+.search-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.search-section {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.search-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.search-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.search-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.search-examples {
+    margin-top: 1.5rem;
+}
+
+.search-examples p {
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.example-chip {
+    display: inline-block;
+    margin: 0.25rem;
+    padding: 0.5rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.example-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.result-portion {
+    margin: 1rem 0;
+    padding: 0.75rem;
+    background: var(--card-bg);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+}

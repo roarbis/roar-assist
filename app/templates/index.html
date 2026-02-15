@@ -167,6 +167,23 @@
 
                     <div class="result-portion" id="resultPortion"></div>
 
+                    <!-- Portion Adjuster -->
+                    <div class="portion-adjuster" id="portionAdjuster" style="display:none">
+                        <h4>Adjust Portion Size</h4>
+                        <p class="portion-current">Current: <span id="currentPortion">1 serving</span></p>
+                        <div class="portion-buttons">
+                            <button class="portion-btn" data-multiplier="0.5">0.5x</button>
+                            <button class="portion-btn active" data-multiplier="1">1x</button>
+                            <button class="portion-btn" data-multiplier="1.5">1.5x</button>
+                            <button class="portion-btn" data-multiplier="2">2x</button>
+                            <button class="portion-btn" data-multiplier="custom">Custom</button>
+                        </div>
+                        <div class="custom-portion-input" id="customPortionInput" style="display:none">
+                            <input type="number" id="customMultiplier" step="0.1" min="0.1" max="10" placeholder="e.g., 2.5">
+                            <button class="btn btn-sm" id="applyCustom">Apply</button>
+                        </div>
+                    </div>
+
                     <div class="health-tags">
                         <h4>&#9989; Health Benefits</h4>
                         <div id="benefitsTags" class="tags-container"></div>
@@ -183,6 +200,113 @@
                         </button>
                         <button id="retakeBtn" class="btn btn-outline btn-large btn-full">
                             &#128260; Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search View -->
+    <section id="view-search" class="view">
+        <div class="search-container">
+            <!-- Search Input Section -->
+            <div id="searchSection" class="search-section">
+                <div class="search-icon">&#128269;</div>
+                <h2>Search Food</h2>
+                <p class="text-muted">Type what you're planning to eat</p>
+
+                <div class="search-input-group">
+                    <input type="text" id="searchInput"
+                           placeholder="e.g., grilled salmon 200g"
+                           class="search-input">
+                    <button id="searchBtn" class="btn btn-primary btn-large">
+                        Estimate Calories
+                    </button>
+                </div>
+
+                <div class="search-examples">
+                    <p class="text-muted">Try:</p>
+                    <button class="example-chip" data-example="apple">apple</button>
+                    <button class="example-chip" data-example="grilled chicken 150g">grilled chicken 150g</button>
+                    <button class="example-chip" data-example="caesar salad large">caesar salad large</button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="searchLoading" class="analysis-loading" style="display:none">
+                <div class="spinner"></div>
+                <p>Analyzing food...</p>
+            </div>
+
+            <!-- Search Result -->
+            <div id="searchResult" class="analysis-result" style="display:none">
+                <div class="result-card">
+                    <div class="result-header">
+                        <h2 id="searchResultFoodName">Food Name</h2>
+                        <div class="food-score" id="searchResultFoodScore">
+                            <span class="score-value">0</span>
+                            <span class="score-label">/10</span>
+                        </div>
+                    </div>
+
+                    <div class="result-calories">
+                        <span class="calories-value" id="searchResultCalories">0</span>
+                        <span class="calories-label">calories</span>
+                    </div>
+
+                    <div class="macros-grid">
+                        <div class="macro-item">
+                            <span class="macro-value" id="searchResultProtein">0g</span>
+                            <span class="macro-label">Protein</span>
+                        </div>
+                        <div class="macro-item">
+                            <span class="macro-value" id="searchResultCarbs">0g</span>
+                            <span class="macro-label">Carbs</span>
+                        </div>
+                        <div class="macro-item">
+                            <span class="macro-value" id="searchResultFat">0g</span>
+                            <span class="macro-label">Fat</span>
+                        </div>
+                    </div>
+
+                    <div class="result-portion">
+                        <strong>Portion:</strong> <span id="searchResultPortion">-</span>
+                    </div>
+
+                    <!-- Portion adjuster for search -->
+                    <div class="portion-adjuster" id="searchPortionAdjuster" style="display:none">
+                        <h4>Adjust Portion Size</h4>
+                        <p class="portion-current">Current: <span id="searchCurrentPortion">1 serving</span></p>
+                        <div class="portion-buttons" id="searchPortionButtons">
+                            <button class="portion-btn" data-multiplier="0.5">0.5x</button>
+                            <button class="portion-btn active" data-multiplier="1">1x</button>
+                            <button class="portion-btn" data-multiplier="1.5">1.5x</button>
+                            <button class="portion-btn" data-multiplier="2">2x</button>
+                            <button class="portion-btn" data-multiplier="custom">Custom</button>
+                        </div>
+                        <div class="custom-portion-input" id="searchCustomPortionInput" style="display:none">
+                            <input type="number" id="searchCustomMultiplier" step="0.1" min="0.1" max="10" placeholder="e.g., 2.5">
+                            <button class="btn btn-sm" id="searchApplyCustom">Apply</button>
+                        </div>
+                    </div>
+
+                    <div class="health-tags">
+                        <h4>&#9989; Health Benefits</h4>
+                        <div id="searchResultBenefits" class="tags-container"></div>
+                    </div>
+
+                    <div class="health-tags">
+                        <h4>&#9888;&#65039; Watch Out</h4>
+                        <div id="searchResultNegatives" class="tags-container"></div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button id="logSearchMealBtn" class="btn btn-primary btn-large btn-full">
+                            &#9989; Log This Meal
+                        </button>
+                        <button id="searchAgainBtn" class="btn btn-outline btn-large btn-full">
+                            &#128269; Search Again
                         </button>
                     </div>
                 </div>
@@ -229,9 +353,13 @@
         <span class="nav-icon">&#127968;</span>
         <span class="nav-label">Dashboard</span>
     </button>
+    <button class="nav-btn" data-view="search">
+        <span class="nav-icon">&#128269;</span>
+        <span class="nav-label">Search</span>
+    </button>
     <button class="nav-btn" data-view="add">
         <span class="nav-icon nav-icon-add">&#43;</span>
-        <span class="nav-label">Add Meal</span>
+        <span class="nav-label">Photo</span>
     </button>
     <button class="nav-btn" data-view="history">
         <span class="nav-icon">&#128203;</span>
@@ -245,8 +373,9 @@
 
 <script src="/static/js/api.js"></script>
 <script src="/static/js/charts.js"></script>
-<script src="/static/js/dashboard.js"></script>
+<parameter name="dashboard.js"></script>
 <script src="/static/js/camera.js"></script>
+<script src="/static/js/search.js"></script>
 <script src="/static/js/history.js"></script>
 <script src="/static/js/weekly.js"></script>
 <script src="/static/js/app.js"></script>

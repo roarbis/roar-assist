@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize all modules
     initNavigation();
     initCamera();
+    initSearch();
     initHistory();
     initExport();
     initSettings();
