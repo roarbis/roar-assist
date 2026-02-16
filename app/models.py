@@ -51,3 +51,20 @@ class TodoTask(db.Model):
     # Relationships
     created_by = db.relationship('User', foreign_keys=[created_by_id], backref='tasks_created')
     assigned_to = db.relationship('User', foreign_keys=[assigned_to_id], backref='tasks_assigned')
+
+
+class DevLog(db.Model):
+    """Development activity log for tracking changes and progress"""
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(500), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    category = db.Column(db.String(50), nullable=False)  # Feature, Bug Fix, Deployment, etc.
+    status = db.Column(db.String(20), default='completed')  # completed, in_progress, planned
+    commit_hash = db.Column(db.String(40), nullable=True)  # Git commit SHA
+    commit_url = db.Column(db.String(500), nullable=True)  # GitHub commit URL
+    verbosity_level = db.Column(db.Integer, default=1)  # 1=brief, 2=normal, 3=detailed
+    created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    # Relationships
+    created_by = db.relationship('User', backref='dev_logs')

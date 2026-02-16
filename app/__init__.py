@@ -36,6 +36,12 @@ def create_app():
     def nutri_track():
         return render_template('index.html')
 
+    # Dev Board app route
+    @app.route('/devboard')
+    @login_required
+    def devboard():
+        return render_template('devboard.html')
+
     # API endpoint to get current user info
     @app.route('/api/user')
     @login_required
@@ -52,6 +58,7 @@ def create_app():
     from app.export import export_bp
     from app.news import news_bp
     from app.todo import todo_bp
+    from app.devboard import devboard_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(meals_bp)
@@ -59,6 +66,7 @@ def create_app():
     app.register_blueprint(export_bp)
     app.register_blueprint(news_bp)
     app.register_blueprint(todo_bp)
+    app.register_blueprint(devboard_bp)
 
     # Create database tables
     with app.app_context():

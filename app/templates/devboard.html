@@ -1,0 +1,395 @@
+{% extends "base_with_sidebar.html" %}
+
+{% block title %}Dev Board - Aurora Assist{% endblock %}
+
+{% block extra_css %}
+<style>
+    .devboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .devboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .devboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        display: block;
+    }
+
+    .stat-label {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .filters-section {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .filter-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .filter-input, .filter-select {
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--bg);
+        color: var(--text);
+        font-size: 0.9rem;
+    }
+
+    .timeline-container {
+        position: relative;
+    }
+
+    .log-entry {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        position: relative;
+        transition: all 0.2s;
+    }
+
+    .log-entry:hover {
+        border-color: var(--primary);
+        transform: translateX(4px);
+    }
+
+    .log-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+    }
+
+    .log-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0;
+    }
+
+    .log-meta {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .log-category {
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .category-feature { background: #4CAF50; color: white; }
+    .category-bug { background: #f44336; color: white; }
+    .category-deployment { background: #2196F3; color: white; }
+    .category-enhancement { background: #FF9800; color: white; }
+    .category-docs { background: #9C27B0; color: white; }
+
+    .log-status {
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .status-completed { background: #E8F5E9; color: #2E7D32; }
+    .status-in_progress { background: #FFF3E0; color: #E65100; }
+    .status-planned { background: #E3F2FD; color: #1565C0; }
+
+    .log-timestamp {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    .log-description {
+        color: var(--text);
+        margin: 0.75rem 0;
+        line-height: 1.6;
+    }
+
+    .log-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .commit-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+    .commit-link:hover {
+        text-decoration: underline;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: var(--card-bg);
+        color: var(--text);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-sm:hover {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Add Entry Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: var(--card-bg);
+        border-radius: var(--radius);
+        padding: 2rem;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+    }
+
+    .form-input, .form-textarea, .form-select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--bg);
+        color: var(--text);
+        font-size: 1rem;
+    }
+
+    .form-textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="devboard-container">
+    <div class="devboard-header">
+        <h1>🔧 Dev Board</h1>
+        <button id="addLogBtn" class="btn btn-primary">➕ Add Entry</button>
+    </div>
+
+    <!-- Statistics -->
+    <div class="devboard-stats">
+        <div class="stat-card">
+            <span class="stat-value" id="totalLogs">0</span>
+            <span class="stat-label">Total Entries</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value" id="completedLogs">0</span>
+            <span class="stat-label">Completed</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value" id="inProgressLogs">0</span>
+            <span class="stat-label">In Progress</span>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section">
+        <div class="filter-grid">
+            <div class="filter-group">
+                <label class="filter-label">Search</label>
+                <input type="text" id="searchFilter" class="filter-input" placeholder="Search logs...">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Category</label>
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">All Categories</option>
+                    <option value="feature">Feature</option>
+                    <option value="bug">Bug Fix</option>
+                    <option value="deployment">Deployment</option>
+                    <option value="enhancement">Enhancement</option>
+                    <option value="docs">Documentation</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <select id="statusFilter" class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="completed">Completed</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="planned">Planned</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline-container" id="timeline">
+        <div class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <p>No dev logs yet. Click "Add Entry" to get started!</p>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="logModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modalTitle">Add Dev Log Entry</h2>
+        <form id="logForm">
+            <input type="hidden" id="logId">
+
+            <div class="form-group">
+                <label class="form-label">Title *</label>
+                <input type="text" id="logTitle" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea id="logDescription" class="form-textarea"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Category *</label>
+                <select id="logCategory" class="form-select" required>
+                    <option value="feature">Feature</option>
+                    <option value="bug">Bug Fix</option>
+                    <option value="deployment">Deployment</option>
+                    <option value="enhancement">Enhancement</option>
+                    <option value="docs">Documentation</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <select id="logStatus" class="form-select">
+                    <option value="completed">Completed</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="planned">Planned</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Commit Hash</label>
+                <input type="text" id="logCommitHash" class="form-input" placeholder="e.g., abc123def456">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Commit URL</label>
+                <input type="url" id="logCommitUrl" class="form-input" placeholder="https://github.com/...">
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" id="cancelBtn" class="btn btn-outline">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/static/js/devboard.js"></script>
+{% endblock %}
